@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const ItemSchema = mongoose.Schema({
   name: String,
-  itemTypeId: String,
+  categoryId: String, //Displayed as "type"
   price: Number,
   photo: String,
 });
