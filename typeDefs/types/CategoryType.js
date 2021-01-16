@@ -1,3 +1,5 @@
+const graphql = require("graphql");
+
 const {
   GraphQLID,
   GraphQLString,
