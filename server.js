@@ -1,9 +1,13 @@
+//Import dependencies
 const mongoose = require("mongoose");
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
+const { graphqlUploadExpress } = require("graphql-upload");
 const { graphqlHTTP } = require("express-graphql");
-const schema = require("./typeDefs/schema");
+const { GraphQLUpload } = require("graphql-upload");
 
+//Initialize db
 const db = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -22,16 +26,27 @@ mongoose
   .then(() => console.log("Database connected"))
   .catch((error) => console.log("Databased failed: ", error));
 
-const app = express();
+//Build schema
+const schema = require("./schema");
 
-// bind express with graphql
+//Initialize server
+const app = express();
+app.use(cors());
+
 app.use(
   "/graphql",
+  graphqlUploadExpress({
+    maxFileSize: 10000000,
+    maxFiles: 10,
+    uploadDir: "./images",
+  }),
   graphqlHTTP({
     schema,
     graphiql: true,
   })
 );
+
+app.use("/images", express.static("images"));
 
 app.listen(4000, () => {
   console.log("now listening for requests on port 4000");
