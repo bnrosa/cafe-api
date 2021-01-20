@@ -5,7 +5,6 @@ const express = require("express");
 const cors = require("cors");
 const { graphqlUploadExpress } = require("graphql-upload");
 const { graphqlHTTP } = require("express-graphql");
-const { GraphQLUpload } = require("graphql-upload");
 
 //Initialize db
 const db = {
@@ -52,3 +51,5 @@ const port = process.env.PORT || 4000;
 app.listen(port, () => {
   console.log(`now listening for requests on port ${port}`);
 });
+
+module.exports = app;
