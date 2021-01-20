@@ -22,9 +22,8 @@ const dbOptions = {
 
 mongoose
   .connect(dbUri, dbOptions)
-  .then(() => console.log("Database connected"))
-  .catch((error) => console.log("Databased failed: ", error));
-
+  .then(() => {}) //console.log('Database connected'))
+  .catch((error) => {}); //console.log("Databased failed: ", error));
 //Build schema
 const schema = require("./schema");
 
@@ -48,8 +47,12 @@ app.use(
 app.use("/images", express.static("images"));
 
 const port = process.env.PORT || 4000;
-app.listen(port, () => {
-  console.log(`now listening for requests on port ${port}`);
+const server = app.listen(port, () => {
+  //console.log(`now listening for requests on port ${port}`);
 });
 
-module.exports = app;
+module.exports = {
+  app: app,
+  database: mongoose,
+  express: server,
+};
