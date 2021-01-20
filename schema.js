@@ -12,6 +12,7 @@ const {
 const { GraphQLUpload } = require("graphql-upload");
 const { createWriteStream, mkdir } = require("fs");
 const shortid = require("shortid");
+const cloudinary = require("cloudinary");
 //Types
 
 const ItemType = new GraphQLObjectType({
@@ -84,11 +85,21 @@ const Mutation = new GraphQLObjectType({
         });
 
         const upload = await processUpload(file);
+        cloudinary.config({
+          cloud_name: process.env.CLOUDINARY_NAME,
+          api_key: process.env.CLOUDINARY_API_KEY,
+          api_secret: process.env.CLOUDINARY_API_SECRET,
+        });
+        const result = await cloudinary.v2.uploader.upload(upload.path, {
+          allowed_formats: ["jpg", "png"],
+          public_id: "",
+          folder: "your_folder_name",
+        });
         const item = new Item({
           name: name,
           price: price,
           type: type,
-          photo: upload.path,
+          photo: result.url,
         });
         await item.save();
         return item;
@@ -109,11 +120,21 @@ const Mutation = new GraphQLObjectType({
         });
 
         const upload = await processUpload(file);
+        cloudinary.config({
+          cloud_name: process.env.CLOUDINARY_NAME,
+          api_key: process.env.CLOUDINARY_API_KEY,
+          api_secret: process.env.CLOUDINARY_API_SECRET,
+        });
+        const result = await cloudinary.v2.uploader.upload(upload.path, {
+          allowed_formats: ["jpg", "png"],
+          public_id: "",
+          folder: "your_folder_name",
+        });
         const item = await Item.findByIdAndUpdate(id, {
           name: name,
           price: price,
           type: type,
-          photo: upload.path,
+          photo: result.url,
         });
         item.save();
         return item;
