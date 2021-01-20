@@ -42,7 +42,7 @@ app.use(
   }),
   graphqlHTTP({
     schema,
-    graphiql: true,
+    graphiql: process.env.IS_LOCALHOST ? true : false,
   })
 );
 
